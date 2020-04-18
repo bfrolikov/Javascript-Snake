@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2&display=swap');
+
+body{
+    margin: 0 0 0 0;
+    font-family: 'Baloo Bhaina 2', sans-serif;
+}
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.page-main{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #C0C0C0	;
+}
+.page-header{
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+}
+.page-header h1{
+    font-size: 2.3em;
+}
+.page-footer{
+    min-height: 10%;
+    background: #f2f2f2 ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.page-footer small{
+    font-size: 1em;
+}
+.page-footer ul{
+    list-style-type: none;
+    display: flex;
+    width: 100px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+.page-footer ul li{
+    font-family: initial;
+}
+ion-icon{
+    font-size: 32px;
+    font-family: initial;
+}
+a{
+    color: black;
+}
+
+#game-area{
+    width: 600px;
+    height: 600px;
+    background: white;
+    position: relative;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+}
+.snakeNode{
+    width: 15px;
+    height: 15px;
+    background: black;
+    position: absolute;
+    border-radius: 5px;
+}
+.food{
+    width: 5px;
+    height: 5px;
+    background: orangered;
+    position: absolute;
+    border-radius: 15px;
+}
