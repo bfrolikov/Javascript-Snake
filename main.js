@@ -27,18 +27,23 @@ const spawnFood = () => {
 const updatePosition = () => {
     if (nodes.length > 1) {
         nodes.push(nodes.shift()); //rotate array
+        let newX = parseInt(nodes[nodes.length - 2].obj.style.left) + nodes[nodes.length - 2].dx;
+        let newY = parseInt(nodes[nodes.length - 2].obj.style.top) + nodes[nodes.length - 2].dy;
+        if (detectWallCollision(newX, newY))
+            return false;
         nodes[nodes.length - 1].dx = nodes[nodes.length - 2].dx;
         nodes[nodes.length - 1].dy = nodes[nodes.length - 2].dy;
-        nodes[nodes.length - 1].obj.style.left = (parseInt(nodes[nodes.length - 2].obj.style.left) + nodes[nodes.length - 2].dx) + 'px';
-        nodes[nodes.length - 1].obj.style.top = (parseInt(nodes[nodes.length - 2].obj.style.top) + nodes[nodes.length - 2].dy) + 'px';
+        nodes[nodes.length - 1].obj.style.left = newX + 'px';
+        nodes[nodes.length - 1].obj.style.top =  newY + 'px';
     } else {
-        nodes[0].obj.style.left =
-            (parseInt(nodes[0].obj.style.left) +
-                nodes[0].dx) + 'px';
-        nodes[0].obj.style.top =
-            (parseInt(nodes[0].obj.style.top) +
-                nodes[0].dy) + 'px';
+        let newX = parseInt(nodes[0].obj.style.left) + nodes[0].dx;
+        let newY = parseInt(nodes[0].obj.style.top) + nodes[0].dy;
+        if (detectWallCollision(newX, newY))
+            return false;
+        nodes[0].obj.style.left = newX + 'px';
+        nodes[0].obj.style.top = newY + 'px';
     }
+    return true;
 }
 const detectFoodCollision = () => {
     let foodX = parseInt(foodItem.style.left) - 5;
@@ -49,10 +54,20 @@ const detectFoodCollision = () => {
 
 
 }
-const detectWallCollision = () => {
+const detectWallCollision = (currentX, currentY) => {
+    return currentX < 0 || currentX >= 600 || currentY < 0 || currentY >= 600;
+}
+const detectSelfCollision = ()=> {
     let headX = parseInt(nodes[nodes.length - 1].obj.style.left);
     let headY = parseInt(nodes[nodes.length - 1].obj.style.top);
-    return headX < 0 || headX >= 600 || headY < 0 || headY >= 600;
+    for(let i = 0;i < nodes.length-1;i++)
+    {
+        let currX = parseInt(nodes[i].obj.style.left);
+        let currY = parseInt(nodes[i].obj.style.top);
+        if(currX === headX && currY===headY)
+            return true;
+    }
+    return false;
 }
 const addTailElement = () => {
     let newNode = document.createElement('div');
@@ -104,18 +119,24 @@ document.addEventListener('keydown', ev => {
 })
 
 const clock = () => {
-    if(!lost) {
-        updatePosition();
-        if(detectWallCollision())
+    if (!lost) {
+        if (!detectSelfCollision() && updatePosition()) {
+            if (detectFoodCollision()) {
+                foodItem.remove();
+                spawnFood();
+                addTailElement();
+            }
+        }
+        else
         {
-            lost=true;
-            return;
+            lost = true;
         }
-        if (detectFoodCollision()) {
-            foodItem.remove();
-            spawnFood();
-            addTailElement();
-        }
+    }
+    else {
+        document
+            .querySelector("#you-lose")
+            .style
+            .visibility = 'visible';
     }
 }
 
