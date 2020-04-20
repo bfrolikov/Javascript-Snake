@@ -3,6 +3,7 @@
 body{
     margin: 0 0 0 0;
     font-family: 'Baloo Bhaina 2', sans-serif;
+    overflow:hidden;
 }
 .wrapper{
     display: flex;
@@ -25,13 +26,11 @@ body{
     font-size: 2.3em;
 }
 .page-footer{
-    min-height: 10%;
     background: #f2f2f2 ;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 40px;
-    padding-right: 40px;
+    padding: 15px 40px;
 }
 .page-footer small{
     font-size: 1em;
@@ -47,6 +46,9 @@ body{
 }
 .page-footer ul li{
     font-family: initial;
+}
+#restart-label{
+    margin-right: 95px;
 }
 ion-icon{
     font-size: 32px;
@@ -85,4 +87,12 @@ a{
     font-size: 3em;
     color: orangered;
     visibility: hidden;
+}
+#difficulty{
+    margin-bottom: 200px;
+}
+#difficulty select{
+    margin-left: 25px;
+    font-family: inherit;
+    font-size: 1em;
 }

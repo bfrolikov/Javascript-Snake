@@ -58,6 +58,8 @@ const detectWallCollision = (currentX, currentY) => {
     return currentX < 0 || currentX >= 600 || currentY < 0 || currentY >= 600;
 }
 const detectSelfCollision = ()=> {
+    if(nodes.length===1)
+        return false;
     let headX = parseInt(nodes[nodes.length - 1].obj.style.left);
     let headY = parseInt(nodes[nodes.length - 1].obj.style.top);
     for(let i = 0;i < nodes.length-1;i++)
@@ -97,29 +99,11 @@ const addTailElement = () => {
     });
     gameArea.appendChild(newNode);
 }
-document.addEventListener('keydown', ev => {
-    switch (ev.key) {
-        case 'ArrowUp':
-            nodes[nodes.length - 1].dx = 0;
-            nodes[nodes.length - 1].dy = -15;
-            break;
-        case 'ArrowDown':
-            nodes[nodes.length - 1].dx = 0;
-            nodes[nodes.length - 1].dy = 15;
-            break;
-        case 'ArrowLeft':
-            nodes[nodes.length - 1].dx = -15;
-            nodes[nodes.length - 1].dy = 0;
-            break;
-        case 'ArrowRight':
-            nodes[nodes.length - 1].dx = 15;
-            nodes[nodes.length - 1].dy = 0;
-            break;
-    }
-})
+
 
 const clock = () => {
     if (!lost) {
+        console.log('clock')
         if (!detectSelfCollision() && updatePosition()) {
             if (detectFoodCollision()) {
                 foodItem.remove();
@@ -139,6 +123,65 @@ const clock = () => {
             .visibility = 'visible';
     }
 }
+document.addEventListener('keydown', ev => {
+    switch (ev.key) {
+        case 'ArrowUp':
+            nodes[nodes.length - 1].dx = 0;
+            nodes[nodes.length - 1].dy = -15;
+            break;
+        case 'ArrowDown':
+            nodes[nodes.length - 1].dx = 0;
+            nodes[nodes.length - 1].dy = 15;
+            break;
+        case 'ArrowLeft':
+            nodes[nodes.length - 1].dx = -15;
+            nodes[nodes.length - 1].dy = 0;
+            break;
+        case 'ArrowRight':
+            nodes[nodes.length - 1].dx = 15;
+            nodes[nodes.length - 1].dy = 0;
+            break;
+        case ' ':
+            restart();
+            break
+    }
+})
 
-window.setInterval(clock, 200);
+let difficultyMap = new Map();
+difficultyMap.set('Easy',200);
+difficultyMap.set('Medium',150);
+difficultyMap.set('Hard',100);
+difficultyMap.set('Brutal',50);
+
+let timerID = window.setInterval(clock, difficultyMap.get('Easy'));
+
+let difficultySelector = document.querySelector('#difficulty select')
+difficultySelector.onchange = ()=>{
+    window.clearInterval(timerID);
+    timerID = window.setInterval(clock,difficultyMap.get(difficultySelector.value));
+    gameArea.focus();
+    difficultySelector.blur();
+}
+const restart = ()=>{
+    for(let i = 0;i<nodes.length;i++)
+    {
+        nodes[i].obj.remove();
+    }
+    nodes = [];
+    initialHead = document.createElement('div');
+    initialHead.setAttribute('class', 'snakeNode')
+    initialHead.style.left = '0px';
+    initialHead.style.top = '150px';
+    nodes.push({
+        obj: initialHead,
+        dx: 0,
+        dy: 0
+    })
+    gameArea.appendChild(initialHead);
+    lost = false;
+    document
+        .querySelector("#you-lose")
+        .style
+        .visibility = 'hidden';
+}
 spawnFood();
