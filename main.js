@@ -103,7 +103,6 @@ const addTailElement = () => {
 
 const clock = () => {
     if (!lost) {
-        console.log('clock')
         if (!detectSelfCollision() && updatePosition()) {
             if (detectFoodCollision()) {
                 foodItem.remove();
